@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:notice_flutter_app/routes/routes.dart';
+
 class NavDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -21,32 +23,32 @@ class NavDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.home),
             title: Text('Welcome'),
-            onTap: () => {},
+            onTap: ()  {Navigator.pushReplacementNamed(context, Routes.home);},
           ),
           ListTile(
             leading: Icon(Icons.notes),
             title: Text('Notes'),
-            onTap: () => {Navigator.of(context).pop()},
+            onTap: ()  {Navigator.pushReplacementNamed(context, Routes.notes);},
           ),
           ListTile(
             leading: Icon(Icons.list),
-            title: Text('Shopping List'),
-            onTap: () => {Navigator.of(context).pop()},
+            title: Text('To-Dos'),
+            onTap: ()  {Navigator.pushReplacementNamed(context, Routes.to_do);},
           ),
           ListTile(
             leading: Icon(Icons.checklist_outlined),
-            title: Text('To-Do'),
-            onTap: () => {Navigator.of(context).pop()},
+            title: Text('Events'),
+            onTap: ()  {Navigator.pushReplacementNamed(context, Routes.events);},
           ),
           ListTile(
             leading: Icon(Icons.person),
             title: Text('Profile'),
-            onTap: () => {Navigator.of(context).pop()},
+            onTap: ()  {Navigator.pushReplacementNamed(context, Routes.profile);},
           ),
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text('Logout'),
-            onTap: () => {Navigator.of(context).pop()},
+            onTap: ()  {Navigator.pushReplacementNamed(context, Routes.login);},
           ),
         ],
       ),
