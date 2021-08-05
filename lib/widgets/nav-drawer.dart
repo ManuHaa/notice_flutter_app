@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:notice_flutter_app/routes/routes.dart';
+
 class NavDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,7 @@ class NavDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.notes),
             title: Text('Notes'),
-            onTap: () => {Navigator.of(context).pop()},
+            onTap: ()  {Navigator.pushReplacementNamed(context, Routes.notes);},
           ),
           ListTile(
             leading: Icon(Icons.list),

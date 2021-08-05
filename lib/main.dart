@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:notice_flutter_app/widgets/nav-drawer.dart';
+import 'package:notice_flutter_app/routes/routes.dart';
+import 'package:notice_flutter_app/views/notes.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,6 +15,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(),
+      routes: {
+        Routes.notes: (context) => Notes(),
+      },
     );
   }
 }
