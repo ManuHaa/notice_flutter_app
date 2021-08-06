@@ -9,10 +9,12 @@ class ToDo extends StatelessWidget {
     return Container(
         child: Scaffold(
             appBar: AppBar(
-              title: const Text('To-Do'),
-              centerTitle: true,
-            ),
-            drawer: NavDrawer()
-        ));
+                title: const Text(
+                  'To-Do',
+                  style: TextStyle(color: Colors.white),
+                ),
+                centerTitle: true,
+                iconTheme: IconThemeData(color: Colors.white)),
+            drawer: NavDrawer()));
   }
 }

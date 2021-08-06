@@ -9,10 +9,12 @@ class Notes extends StatelessWidget {
     return Container(
         child: Scaffold(
             appBar: AppBar(
-              title: const Text('Notes'),
-              centerTitle: true,
-            ),
-            drawer: NavDrawer()
-        ));
+                title: const Text(
+                  'Notes',
+                  style: TextStyle(color: Colors.white),
+                ),
+                centerTitle: true,
+                iconTheme: IconThemeData(color: Colors.white)),
+            drawer: NavDrawer()));
   }
 }

@@ -9,10 +9,12 @@ class Login extends StatelessWidget {
     return Container(
         child: Scaffold(
             appBar: AppBar(
-              title: const Text('Login'),
+              title: const Text(
+                'Login',
+                style: TextStyle(color: Colors.white),
+              ),
               centerTitle: true,
             ),
-            drawer: NavDrawer()
-        ));
+            drawer: NavDrawer()));
   }
 }

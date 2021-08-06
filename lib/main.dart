@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'OrganiZer',
       theme: ThemeData(
         primarySwatch: MaterialColor(0xFFF8B948, color),
       ),
@@ -38,12 +38,7 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: NavDrawer(),
-      appBar: AppBar(
-        title: Text('Side menu'),
-      ),
-      body: Center(
-        child: Text('Side Menu Tutorial'),
-      ),
+      appBar: AppBar(),
     );
   }
 }
