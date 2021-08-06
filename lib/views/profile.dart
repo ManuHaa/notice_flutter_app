@@ -9,10 +9,12 @@ class Profile extends StatelessWidget {
     return Container(
         child: Scaffold(
             appBar: AppBar(
-              title: const Text('Profile'),
-              centerTitle: true,
-            ),
-            drawer: NavDrawer()
-        ));
+                title: const Text(
+                  'Profile',
+                  style: TextStyle(color: Colors.white),
+                ),
+                centerTitle: true,
+                iconTheme: IconThemeData(color: Colors.white)),
+            drawer: NavDrawer()));
   }
 }

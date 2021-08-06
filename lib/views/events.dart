@@ -9,10 +9,12 @@ class Events extends StatelessWidget {
     return Container(
         child: Scaffold(
             appBar: AppBar(
-              title: const Text('Events'),
-              centerTitle: true,
-            ),
-            drawer: NavDrawer()
-        ));
+                title: const Text(
+                  'Events',
+                  style: TextStyle(color: Colors.white),
+                ),
+                centerTitle: true,
+                iconTheme: IconThemeData(color: Colors.white)),
+            drawer: NavDrawer()));
   }
 }
