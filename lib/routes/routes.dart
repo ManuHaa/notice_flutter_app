@@ -4,6 +4,7 @@ import 'package:notice_flutter_app/views/login.dart';
 import 'package:notice_flutter_app/views/profile.dart';
 import 'package:notice_flutter_app/views/to_do.dart';
 import 'package:notice_flutter_app/views/home.dart';
+import 'package:notice_flutter_app/views/password_reset.dart';
 
 
 class Routes {
@@ -13,4 +14,5 @@ class Routes {
   static const String profile = Profile.routeName;
   static const String to_do = ToDo.routeName;
   static const String home = Home.routeName;
+  static const String password_reset = PasswordReset.routeName;
 }
