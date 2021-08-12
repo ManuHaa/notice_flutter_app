@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: MaterialColor(0xFFF8B948, color),
       ),
-      home: MyHomePage(),
+      home: Login(),
       routes: {
         Routes.home: (context) => Home(),
         Routes.notes: (context) => Notes(),
