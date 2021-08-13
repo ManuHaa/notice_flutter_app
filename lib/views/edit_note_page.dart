@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:notice_flutter_app/colorpalette/colorpalette.dart';
 import 'package:notice_flutter_app/db/notes_database.dart';
 import 'package:notice_flutter_app/model/note.dart';
-import 'package:notice_flutter_app/widgets/nav-drawer.dart';
 import 'package:notice_flutter_app/widgets/note_form_widget.dart';
 
 //view if you touch the add Button

@@ -1,4 +1,3 @@
-import 'package:notice_flutter_app/views/notes.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:notice_flutter_app/model/note.dart';
