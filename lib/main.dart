@@ -6,7 +6,7 @@ import 'package:notice_flutter_app/views/notes.dart';
 import 'package:notice_flutter_app/views/events.dart';
 import 'package:notice_flutter_app/views/login.dart';
 import 'package:notice_flutter_app/views/profile.dart';
-import 'package:notice_flutter_app/views/to_do.dart';
+import 'package:notice_flutter_app/views/todos.dart';
 import 'package:notice_flutter_app/views/home.dart';
 import 'package:notice_flutter_app/colorpalette/colorpalette.dart';
 

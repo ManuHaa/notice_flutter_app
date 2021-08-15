@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:notice_flutter_app/colorpalette/colorpalette.dart';
 
 class TodoFormWidget extends StatelessWidget {
   final int? number;

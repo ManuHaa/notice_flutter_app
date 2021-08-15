@@ -6,8 +6,8 @@ import 'package:notice_flutter_app/widgets/nav-drawer.dart';
 import 'package:notice_flutter_app/model/note.dart';
 import 'package:notice_flutter_app/widgets/note_card_widget.dart';
 
-import 'edit_note_page.dart';
-import 'note_detail_page.dart';
+import 'notes_edit_page.dart';
+import 'notes_detail_page.dart';
 
 class Notes extends StatelessWidget {
   static const String routeName = '/notes';
