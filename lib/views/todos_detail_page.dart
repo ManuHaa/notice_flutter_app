@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:notice_flutter_app/colorpalette/colorpalette.dart';
 import 'package:notice_flutter_app/db/todo_database.dart';
 import 'package:notice_flutter_app/model/todo.dart';
 
