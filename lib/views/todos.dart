@@ -1,13 +1,10 @@
-import 'dart:async';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter/material.dart';
+import 'package:notice_flutter_app/views/todos_add_page.dart';
 import 'package:notice_flutter_app/widgets/nav-drawer.dart';
-import 'package:notice_flutter_app/colorpalette/colorpalette.dart';
-import 'package:notice_flutter_app/db/todo_database.dart';
+
 import 'package:notice_flutter_app/model/todo.dart';
-import 'package:notice_flutter_app/widgets/todo_card_widget.dart';
-import 'todos_edit_page.dart';
-import 'todos_detail_page.dart';
+
+import 'todos_add_page.dart';
 
 //StatelessWidget -> sind nicht veränderbar
 //ist der Balken oben
@@ -39,55 +36,98 @@ class TodoListState extends State<ToDoList> {
   late List<Todo> todos;
   bool isLoading = false;
 
-  @override
+  /*@override
   void initState() {
     super.initState();
     refreshTodo();
-  }
+  }*/
 
   //close the DB
-  @override
+  /*@override
   void dispose() {
     TodoDatabase.instance.close();
     super.dispose();
-  }
+  }*/
 
   //refresh the db
-  Future refreshTodo() async {
+  /*Future refreshTodo() async {
     setState(() => isLoading = true);
     this.todos = await TodoDatabase.instance.readAllNotes();
 
     setState(() => isLoading = false);
-  }
+  }*/
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        body: Center(
-          child: isLoading
-              ? CircularProgressIndicator()
-              : todos.isEmpty
-                  ? Text(
-                      'No ToDos',
-                      style: TextStyle(color: Colors.black, fontSize: 24),
-                    )
-                  : buildTodo(),
-        ),
-        //Butten zum hinzufügen
+  Widget build(BuildContext context) {
+    return Scaffold(
         floatingActionButton: FloatingActionButton(
-          backgroundColor: MaterialColor(0xFFF8B948, color),
+          backgroundColor: Theme.of(context).primaryColor,
           child: Icon(Icons.add),
-          onPressed: () async {
-            await Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => AddEditTodoPage()),
-            );
-
-            refreshTodo();
-          },
+          onPressed: () => Navigator.push(
+              context, MaterialPageRoute(builder: (_) => AddPage())),
         ),
-      );
+        body: ListView.builder(
+          padding: EdgeInsets.symmetric(vertical: 80.0),
+          itemCount: 10,
+          itemBuilder: (BuildContext context, int index) {
+            if (index == 0) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 40.0, vertical: 20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      'My Tasks',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 40.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 10.0),
+                    Text(
+                      '1 of 10',
+                      style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
+              );
+            }
+            return buildTask(index);
+          },
+        ));
+  }
+
+  Widget buildTask(int index) {
+    return Padding(
+        padding: EdgeInsets.symmetric(horizontal: 25),
+        child: Column(
+          children: [
+            ListTile(
+              title: Text('Task Title'),
+              subtitle: Text('...'),
+              trailing: Checkbox(
+                onChanged: (value) {
+                  print(value);
+                },
+                activeColor: Theme.of(context).primaryColor,
+                value: true,
+              ),
+            ),
+            const Divider(
+              color: Colors.black,
+              thickness: 1,
+            )
+          ],
+        ));
+  }
 
   // Build the whole list of todo items
-  Widget buildTodo() => StaggeredGridView.countBuilder(
+  /*Widget buildTodo() => StaggeredGridView.countBuilder(
         padding: EdgeInsets.all(8),
         itemCount: todos.length,
         staggeredTileBuilder: (index) => StaggeredTile.fit(2),
@@ -107,5 +147,5 @@ class TodoListState extends State<ToDoList> {
               },
               child: TodoCardWidget(todo: todo, index: index));
         },
-      );
+      );*/
 }

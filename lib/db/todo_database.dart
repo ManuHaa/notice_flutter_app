@@ -27,13 +27,15 @@ class TodoDatabase {
     final idType = 'INTEGER PRIMARY KEY AUTOINCREMENT';
     final integerType = 'INTEGER NOT NULL';
     final textType = 'TEXT NOT NULL';
+    final dateType = 'NOT NULL';
 
     await db.execute('''
     CREATE TABLE $tableTodo (
       ${TodoFields.id} $idType,
-      ${TodoFields.number} $integerType,
       ${TodoFields.title} $textType,
-      ${TodoFields.description} $textType
+      ${TodoFields.dateTime} $dateType,
+      ${TodoFields.priority} $textType,
+      ${TodoFields.status} $integerType,
       )
       ''');
   }

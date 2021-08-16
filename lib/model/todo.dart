@@ -1,42 +1,54 @@
 final String tableTodo = 'todo';
 
 class TodoFields {
-  static final List<String> values = [id, number, title, description];
+  static final List<String> values = [id, title, dateTime, priority, status];
 
   static final String id = '_id';
-  static final String number = 'number';
   static final String title = 'title';
-  static final String description = 'description';
+  static final String dateTime = 'dateTime';
+  static final String priority = 'priority';
+  static final String status = 'status';
 }
 
 class Todo {
   final int? id;
-  final int number;
   final String title;
-  final String description;
+  final DateTime dateTime;
+  final String priority;
+  final int status; // 0 incomplete, 1 complete
 
   const Todo(
       {this.id,
-      required this.number,
       required this.title,
-      required this.description});
+      required this.dateTime,
+      required this.priority,
+      required this.status});
 
-  Todo copy({int? id, int? number, String? title, String? description}) => Todo(
-      id: id ?? this.id,
-      number: number ?? this.number,
-      title: title ?? this.title,
-      description: description ?? this.description);
+  Todo copy(
+          {int? id,
+          String? title,
+          DateTime? dateTime,
+          String? priority,
+          int? status}) =>
+      Todo(
+          id: id ?? this.id,
+          title: title ?? this.title,
+          dateTime: dateTime ?? this.dateTime,
+          priority: priority ?? this.priority,
+          status: status ?? this.status);
 
   Map<String, Object?> toJson() => {
         TodoFields.id: id,
-        TodoFields.number: number,
         TodoFields.title: title,
-        TodoFields.description: description
+        TodoFields.dateTime: dateTime,
+        TodoFields.priority: priority,
+        TodoFields.status: status
       };
 
   static Todo fromJson(Map<String, Object?> json) => Todo(
       id: json[TodoFields.id] as int?,
-      number: json[TodoFields.number] as int,
       title: json[TodoFields.title] as String,
-      description: json[TodoFields.description] as String);
+      dateTime: json[TodoFields.dateTime] as DateTime,
+      priority: json[TodoFields.priority] as String,
+      status: json[TodoFields.status] as int);
 }
