@@ -149,7 +149,7 @@ class AddPageState extends State<AddPage> {
                       decoration: BoxDecoration(
                           color: Theme.of(context).primaryColor,
                           borderRadius: BorderRadius.circular(30.0)),
-                      child: FlatButton(
+                      child: TextButton(
                         child: Text(
                           'Add',
                           style: TextStyle(color: Colors.white, fontSize: 20.0),
