@@ -1,54 +1,68 @@
-final String tableTodo = 'todo';
-
-class TodoFields {
-  static final List<String> values = [id, title, dateTime, priority, status];
-
-  static final String id = '_id';
-  static final String title = 'title';
-  static final String dateTime = 'dateTime';
-  static final String priority = 'priority';
-  static final String status = 'status';
-}
-
 class Todo {
-  final int? id;
-  final String title;
-  final DateTime dateTime;
-  final String priority;
-  final int status; // 0 incomplete, 1 complete
+  int _id, _priority;
+  String _title, _description, _date;
+  //This is Optioanl Position Paremeter if {} This is Optional Named Parameter
+  Todo(this._title, this._date, this._priority, [this._description]);
+  //This is during editing(Called with Id)
+  Todo.withId(this._id, this._title, this._date, this._priority,
+      [this._description]);
 
-  const Todo(
-      {this.id,
-      required this.title,
-      required this.dateTime,
-      required this.priority,
-      required this.status});
+//All the Getters(Controls the Data Asked By another method from this Class)
+  int get id {
+    return _id;
+  }
 
-  Todo copy(
-          {int? id,
-          String? title,
-          DateTime? dateTime,
-          String? priority,
-          int? status}) =>
-      Todo(
-          id: id ?? this.id,
-          title: title ?? this.title,
-          dateTime: dateTime ?? this.dateTime,
-          priority: priority ?? this.priority,
-          status: status ?? this.status);
+  int get priority => _priority;
+  String get title => _title;
+  String get description => _description;
+  String get date => _date;
 
-  Map<String, Object?> toJson() => {
-        TodoFields.id: id,
-        TodoFields.title: title,
-        TodoFields.dateTime: dateTime,
-        TodoFields.priority: priority,
-        TodoFields.status: status
-      };
+//These are all the Setters
+  set title(String newTitle) {
+    if (newTitle.length <= 255) {
+      this._title = newTitle;
+    }
+  }
 
-  static Todo fromJson(Map<String, Object?> json) => Todo(
-      id: json[TodoFields.id] as int?,
-      title: json[TodoFields.title] as String,
-      dateTime: json[TodoFields.dateTime] as DateTime,
-      priority: json[TodoFields.priority] as String,
-      status: json[TodoFields.status] as int);
+  set description(String newDescription) {
+    if (newDescription.length <= 255) {
+      this._description = newDescription;
+    }
+  }
+
+  set date(String newDate) {
+    if (newDate.length <= 255) {
+      this._date = newDate;
+    }
+  }
+
+  set priority(int newPre) {
+    if (newPre >= 1 && newPre <= 2) {
+      this._priority = newPre;
+    }
+  }
+
+//Used to Save and Retrive from the Database
+//Converting the Todo Object into Map Object
+  Map<String, dynamic> toMap() {
+    //This is an Map Object
+    var map = Map<String, dynamic>();
+    //This means Already Created in the Database
+    if (id != null) {
+      map['id'] = _id;
+    }
+    map['title'] = _title;
+    map['description'] = _description;
+    map["priority"] = _priority;
+    map['date'] = _date;
+    return map;
+  }
+
+  Todo.fromMapObject(Map<String, dynamic> map) {
+    this._id = map['id'];
+    this._title = map['title'];
+    this._description = map['description'];
+    this._priority = map['priority'];
+    this._date = map['date'];
+  }
 }

@@ -34,7 +34,7 @@ class NotesPage extends StatefulWidget {
 }
 
 class _NotesPageState extends State<NotesPage> {
-  late List<Note> notes;
+  List<Note> notes;
   bool isLoading = false;
 
   @override
@@ -94,7 +94,7 @@ class _NotesPageState extends State<NotesPage> {
           return GestureDetector(
             onTap: () async {
               await Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => NoteDetailPage(noteId: note.id!),
+                builder: (context) => NoteDetailPage(noteId: note.id),
               ));
 
               refreshNotes();

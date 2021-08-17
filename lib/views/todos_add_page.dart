@@ -1,165 +1,255 @@
 import 'package:flutter/material.dart';
+import 'package:notice_flutter_app/colorpalette/colorpalette.dart';
+import 'package:notice_flutter_app/model/todo.dart';
+import 'package:notice_flutter_app/db/todo_database.dart';
 import 'package:intl/intl.dart';
 
-class AddPage extends StatefulWidget {
+class TodoDetail extends StatefulWidget {
+  final String appBarTitle;
+  final Todo todo;
+
+  TodoDetail(this.todo, this.appBarTitle);
+
   @override
-  AddPageState createState() => AddPageState();
+  State<StatefulWidget> createState() {
+    return TodoDetailState(this.todo, this.appBarTitle);
+  }
 }
 
-class AddPageState extends State<AddPage> {
-  final formkey = GlobalKey<FormState>();
-  String title = '';
-  late String priority;
-  DateTime date = DateTime.now();
-  TextEditingController dateController = TextEditingController();
+class TodoDetailState extends State<TodoDetail> {
+  static var _prioities = ["High", "Low"];
+  DatabaseHelper helper = DatabaseHelper();
+  String appBarTitle;
+  Todo todo;
 
-  final DateFormat dateFormatter = DateFormat('dd.MMM.yyyy');
-  final List<String> priorities = ['LOW', 'MEDIUM', 'HIGH'];
+  TodoDetailState(this.todo, this.appBarTitle);
 
-  @override
-  void initState() {
-    super.initState();
-    dateController.text = dateFormatter.format(date);
-  }
-
-  @override
-  void dispose() {
-    dateController.dispose();
-    super.dispose();
-  }
-
-  handleDatePicker() async {
-    final DateTime? _date = await showDatePicker(
-        context: context,
-        initialDate: date,
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2100));
-    if (_date != null && date != date) {
-      setState(() {
-        date = _date;
-      });
-      dateController.text = dateFormatter.format(date);
-    }
-  }
-
-  submit() {
-    if (formkey.currentState!.validate()) {
-      formkey.currentState!.save();
-      print('$title, $date, $priority');
-
-      Navigator.pop(context);
-    }
-  }
+  TextEditingController titleController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Container(
-      padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 80.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          GestureDetector(
-            onTap: () => Navigator.pop(context),
-            child: Icon(
-              Icons.arrow_back_ios,
-              size: 30.0,
-              color: Theme.of(context).primaryColor,
+    TextStyle textStyle = Theme.of(context).textTheme.headline6;
+    titleController.text = todo.title;
+    descriptionController.text = todo.description;
+
+    return WillPopScope(
+      // ignore: missing_return
+      onWillPop: () {
+        moveToLastScreen();
+      },
+      child: Scaffold(
+        backgroundColor: Colors.orange.shade50,
+        appBar: AppBar(
+          title: Text(appBarTitle),
+          backgroundColor: MaterialColor(0xFFF8B948, color),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              moveToLastScreen();
+            },
+          ),
+        ),
+        body: Padding(
+          padding: EdgeInsets.all(10.0),
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            child: ListView(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(top: 15.0, bottom: 5.0),
+                  //dropdown menu
+                  child: new ListTile(
+                    leading: const Icon(Icons.low_priority),
+                    title: DropdownButton(
+                        items: _prioities.map((String dropDownStringItem) {
+                          return DropdownMenuItem<String>(
+                            value: dropDownStringItem,
+                            child: Text(dropDownStringItem,
+                                style: TextStyle(
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.red)),
+                          );
+                        }).toList(),
+                        value: getPriorityAsString(todo.priority),
+                        onChanged: (valueSelectedByUser) {
+                          setState(() {
+                            updatePriorityAsInt(valueSelectedByUser);
+                          });
+                        }),
+                  ),
+                ),
+                // Second Element
+                Padding(
+                  padding: EdgeInsets.only(top: 15.0, bottom: 15.0, left: 15.0),
+                  child: TextField(
+                    controller: titleController,
+                    style: textStyle,
+                    onChanged: (value) {
+                      updateTitle();
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Title',
+                      labelStyle: textStyle,
+                      icon: Icon(Icons.title),
+                    ),
+                  ),
+                ),
+
+                // Third Element
+                Padding(
+                  padding: EdgeInsets.only(top: 15.0, bottom: 15.0, left: 15.0),
+                  child: TextFormField(
+                    maxLines: 15,
+                    controller: descriptionController,
+                    style: textStyle,
+                    onChanged: (value) {
+                      updateDescription();
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Details',
+                      icon: Icon(Icons.details),
+                    ),
+                  ),
+                ),
+
+                // Fourth Element
+                Padding(
+                  padding: EdgeInsets.all(15.0),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.green,
+                            onPrimary: Colors.white,
+                            padding: const EdgeInsets.all(8.0),
+                          ),
+                          child: Text(
+                            'Save',
+                            textScaleFactor: 1.5,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              debugPrint("Save button clicked");
+                              _save();
+                            });
+                          },
+                        ),
+                      ),
+                      Container(
+                        width: 5.0,
+                      ),
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.red,
+                            onPrimary: Colors.white,
+                            padding: const EdgeInsets.all(8.0),
+                          ),
+                          child: Text(
+                            'Delete',
+                            textScaleFactor: 1.5,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _delete();
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
-          SizedBox(height: 20),
-          Text(
-            'Add Task',
-            style: TextStyle(
-                color: Colors.black,
-                fontSize: 40.0,
-                fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            height: 10.0,
-          ),
-          Form(
-              key: formkey,
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                      padding: EdgeInsets.symmetric(vertical: 20.0),
-                      child: TextFormField(
-                        style: TextStyle(fontSize: 18.0),
-                        decoration: InputDecoration(
-                            labelText: 'title',
-                            labelStyle: TextStyle(fontSize: 18.0),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0))),
-                        validator: (input) => input!.trim().isEmpty
-                            ? 'Please enter a task title'
-                            : null,
-                        onSaved: (input) => title == input,
-                        initialValue: title,
-                      )),
-                  Padding(
-                      padding: EdgeInsets.symmetric(vertical: 20.0),
-                      child: TextFormField(
-                        readOnly: true,
-                        controller: dateController,
-                        style: TextStyle(fontSize: 18.0),
-                        onTap: handleDatePicker,
-                        decoration: InputDecoration(
-                            labelText: 'date',
-                            labelStyle: TextStyle(fontSize: 18.0),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0))),
-                      )),
-                  Padding(
-                      padding: EdgeInsets.symmetric(vertical: 20.0),
-                      child: DropdownButtonFormField(
-                        isDense: true,
-                        icon: Icon(Icons.arrow_drop_down_circle),
-                        iconSize: 22.0,
-                        iconEnabledColor: Theme.of(context).primaryColor,
-                        items: priorities.map((String priority) {
-                          return DropdownMenuItem(
-                              value: priority,
-                              child: Text(priority,
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 18.0)));
-                        }).toList(),
-                        style: TextStyle(fontSize: 18.0),
-                        decoration: InputDecoration(
-                            labelText: 'priorities',
-                            labelStyle: TextStyle(fontSize: 18.0),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0))),
-                        // ignore: unnecessary_null_comparison
-                        validator: (input) => priority == null
-                            ? 'Please select a priority'
-                            : null,
-                        onChanged: (value) {
-                          setState(() {
-                            // ignore: unnecessary_statements
-                            priority == value;
-                          });
-                        },
-                        value: priority,
-                      )),
-                  Container(
-                      margin: EdgeInsets.symmetric(vertical: 20.0),
-                      height: 60.0,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
-                          borderRadius: BorderRadius.circular(30.0)),
-                      child: TextButton(
-                        child: Text(
-                          'Add',
-                          style: TextStyle(color: Colors.white, fontSize: 20.0),
-                        ),
-                        onPressed: submit,
-                      )),
-                ],
-              ))
-        ],
+        ),
       ),
-    ));
+    );
+  }
+
+  void updateTitle() {
+    todo.title = titleController.text;
+  }
+
+  void updateDescription() {
+    todo.description = descriptionController.text;
+  }
+
+  void _save() async {
+    moveToLastScreen();
+    todo.date = DateFormat.yMMMd().format(DateTime.now());
+    int result;
+    if (todo.id != null) {
+      result = await helper.updateTodo(todo);
+    } else {
+      result = await helper.insertTodo(todo);
+    }
+
+    if (result != 0) {
+      _showAlertDialog("Status", "Todo Saved Successfully");
+    } else {
+      _showAlertDialog("Status", "Problem In Saving Note");
+    }
+  }
+
+  void _delete() async {
+    moveToLastScreen();
+
+    if (todo.id == null) {
+      _showAlertDialog("Status", "First Add a Todo");
+      return;
+    }
+    int result = await helper.deleteTodo(todo.id);
+
+    if (result != 0) {
+      _showAlertDialog("Status", "Todo delete Successfully");
+    } else {
+      _showAlertDialog("Status", "Sorry, Error");
+    }
+  }
+
+  //Convert Priority to Int to Save it into Database
+  void updatePriorityAsInt(String value) {
+    switch (value) {
+      case "High":
+        todo.priority = 1;
+        break;
+      case "Low":
+        todo.priority = 2;
+        break;
+      default:
+    }
+  }
+
+  //Converting the Priority into String for showing to User
+  String getPriorityAsString(int value) {
+    String priority;
+    switch (value) {
+      case 1:
+        priority = _prioities[0];
+        break;
+      case 2:
+        priority = _prioities[1];
+        break;
+      default:
+    }
+    return priority;
+  }
+
+  void moveToLastScreen() {
+    Navigator.pop(context, true);
+  }
+
+  void _showAlertDialog(String title, String message) {
+    AlertDialog alertDialog = AlertDialog(
+      title: Text(title),
+      content: Text(message),
+    );
+    showDialog(context: context, builder: (_) => alertDialog);
   }
 }

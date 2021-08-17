@@ -13,9 +13,9 @@ final _lightColors = [
 
 class NoteCardWidget extends StatelessWidget {
   NoteCardWidget({
-    Key? key,
-    required this.note,
-    required this.index,
+    Key key,
+    this.note,
+    this.index,
   }) : super(key: key);
 
   final Note note;

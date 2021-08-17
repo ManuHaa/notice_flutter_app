@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 
 class NoteFormWidget extends StatelessWidget {
-  final bool? isImportant;
-  final int? number;
-  final String? title;
-  final String? description;
+  final bool isImportant;
+  final int number;
+  final String title;
+  final String description;
   final ValueChanged<bool> onChangedImportant;
   final ValueChanged<int> onChangedNumber;
   final ValueChanged<String> onChangedTitle;
   final ValueChanged<String> onChangedDescription;
 
   const NoteFormWidget({
-    Key? key,
+    Key key,
     this.isImportant = false,
     this.number = 0,
     this.title = '',
     this.description = '',
-    required this.onChangedImportant,
-    required this.onChangedNumber,
-    required this.onChangedTitle,
-    required this.onChangedDescription,
+    this.onChangedImportant,
+    this.onChangedNumber,
+    this.onChangedTitle,
+    this.onChangedDescription,
   }) : super(key: key);
 
   @override
@@ -57,7 +57,7 @@ class NoteFormWidget extends StatelessWidget {
       );
 
   Widget buildDescription() => TextFormField(
-        maxLines: 5,
+        maxLines: 30,
         initialValue: description,
         style: TextStyle(color: Colors.black, fontSize: 18),
         decoration: InputDecoration(

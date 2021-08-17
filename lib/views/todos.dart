@@ -1,151 +1,154 @@
 import 'package:flutter/material.dart';
+import 'package:notice_flutter_app/colorpalette/colorpalette.dart';
+import 'dart:async';
+import 'package:notice_flutter_app/db/todo_database.dart';
+import 'package:notice_flutter_app/model/todo.dart';
 import 'package:notice_flutter_app/views/todos_add_page.dart';
 import 'package:notice_flutter_app/widgets/nav-drawer.dart';
+import 'package:sqflite/sqflite.dart';
 
-import 'package:notice_flutter_app/model/todo.dart';
+class Todos extends StatelessWidget {
+  static const String routeName = '/to_do';
 
-import 'todos_add_page.dart';
-
-//StatelessWidget -> sind nicht veränderbar
-//ist der Balken oben
-class ToDo extends StatelessWidget {
-  static const String routeName = '/to-do';
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Scaffold(
-        appBar: AppBar(
-            title: Text('To-Dos', style: TextStyle(color: Colors.white)),
-            centerTitle: true,
-            iconTheme: IconThemeData(color: Colors.white)),
-        drawer: NavDrawer(),
-        body: ToDoList(),
-      ),
-    );
+        child: Scaffold(
+            appBar: AppBar(
+                title: const Text(
+                  'Todo',
+                  style: TextStyle(color: Colors.white),
+                ),
+                centerTitle: true,
+                iconTheme: IconThemeData(color: Colors.white)),
+            drawer: NavDrawer(),
+            body: TodoList()));
   }
 }
 
-//statefulwidget sind veränderbar!!
-//body der Seite
-class ToDoList extends StatefulWidget {
+class TodoList extends StatefulWidget {
+  static const String routeName = '/to_do';
   @override
-  createState() => TodoListState();
+  _TodoListState createState() => _TodoListState();
 }
 
-class TodoListState extends State<ToDoList> {
-  late List<Todo> todos;
-  bool isLoading = false;
+class _TodoListState extends State<TodoList> {
+  DatabaseHelper databaseHelper = DatabaseHelper();
+  List<Todo> todoList;
+  int count = 0;
 
-  /*@override
-  void initState() {
-    super.initState();
-    refreshTodo();
-  }*/
+  void navigateToDetail(Todo todo, String title) async {
+    bool result =
+        await Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return TodoDetail(todo, title);
+    }));
+    if (result == true) {
+      updateListView();
+    } else if (result == null) {
+      Text("No Notes to Show");
+    }
+  }
 
-  //close the DB
-  /*@override
-  void dispose() {
-    TodoDatabase.instance.close();
-    super.dispose();
-  }*/
-
-  //refresh the db
-  /*Future refreshTodo() async {
-    setState(() => isLoading = true);
-    this.todos = await TodoDatabase.instance.readAllNotes();
-
-    setState(() => isLoading = false);
-  }*/
+  void updateListView() {
+    final Future<Database> dbFuture = databaseHelper.initalizeDatabase();
+    dbFuture.then((database) {
+      Future<List<Todo>> todoListFuture = databaseHelper.getTodoList();
+      todoListFuture.then((todoList) {
+        setState(() {
+          this.todoList = todoList;
+          this.count = todoList.length;
+        });
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Theme.of(context).primaryColor,
-          child: Icon(Icons.add),
-          onPressed: () => Navigator.push(
-              context, MaterialPageRoute(builder: (_) => AddPage())),
-        ),
-        body: ListView.builder(
-          padding: EdgeInsets.symmetric(vertical: 80.0),
-          itemCount: 10,
-          itemBuilder: (BuildContext context, int index) {
-            if (index == 0) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 40.0, vertical: 20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'My Tasks',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 40.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 10.0),
-                    Text(
-                      '1 of 10',
-                      style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.w600),
-                    ),
-                  ],
+    if (todoList == null) {
+      updateListView();
+    }
+    Future<bool> _onBackPressed() {
+      return showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text("Do You Really Want To Exit?"),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                "No",
+                style: TextStyle(
+                  color: Colors.black,
                 ),
-              );
-            }
-            return buildTask(index);
-          },
-        ));
-  }
-
-  Widget buildTask(int index) {
-    return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 25),
-        child: Column(
-          children: [
-            ListTile(
-              title: Text('Task Title'),
-              subtitle: Text('...'),
-              trailing: Checkbox(
-                onChanged: (value) {
-                  print(value);
-                },
-                activeColor: Theme.of(context).primaryColor,
-                value: true,
               ),
+              onPressed: () => Navigator.pop(context, false),
             ),
-            const Divider(
-              color: Colors.black,
-              thickness: 1,
-            )
+            TextButton(
+              child: Text(
+                "Yes",
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+              onPressed: () => Navigator.pop(context, true),
+            ),
           ],
-        ));
+        ),
+      );
+    }
+
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Scaffold(
+        body: getTodoListView(),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: MaterialColor(0xFFF8B948, color),
+          child: Icon(Icons.add),
+          onPressed: () {
+            navigateToDetail(Todo("", "", 2), "Add Todo");
+          },
+        ),
+      ),
+    );
   }
 
-  // Build the whole list of todo items
-  /*Widget buildTodo() => StaggeredGridView.countBuilder(
-        padding: EdgeInsets.all(8),
-        itemCount: todos.length,
-        staggeredTileBuilder: (index) => StaggeredTile.fit(2),
-        crossAxisCount: 4,
-        mainAxisSpacing: 4,
-        crossAxisSpacing: 4,
-        itemBuilder: (context, index) {
-          final todo = todos[index];
-
-          return GestureDetector(
-              onTap: () async {
-                await Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => TodoDetailPage(todoId: todo.id!),
-                ));
-
-                refreshTodo();
+  ListView getTodoListView() {
+    return ListView.builder(
+      itemCount: count,
+      itemBuilder: (context, position) {
+        return Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          color: Colors.orange.shade100,
+          elevation: 4.0,
+          child: ListTile(
+            leading: IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.check_circle_outline_outlined),
+            ),
+            title: Text(
+              this.todoList[position].title,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 25.0),
+            ),
+            subtitle: Text(
+              this.todoList[position].date,
+              style: TextStyle(color: Colors.black),
+            ),
+            trailing: GestureDetector(
+              child: Icon(
+                Icons.edit,
+                color: Colors.grey,
+              ),
+              onTap: () {
+                navigateToDetail(this.todoList[position], "Edit Todo");
               },
-              child: TodoCardWidget(todo: todo, index: index));
-        },
-      );*/
+            ),
+          ),
+        );
+      },
+    );
+  }
 }
