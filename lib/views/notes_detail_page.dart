@@ -10,8 +10,8 @@ class NoteDetailPage extends StatefulWidget {
   final int noteId;
 
   const NoteDetailPage({
-    Key? key,
-    required this.noteId,
+    Key key,
+    this.noteId,
   }) : super(key: key);
 
   @override
@@ -19,7 +19,7 @@ class NoteDetailPage extends StatefulWidget {
 }
 
 class _NoteDetailPageState extends State<NoteDetailPage> {
-  late Note note;
+  Note note;
   bool isLoading = false;
 
   @override

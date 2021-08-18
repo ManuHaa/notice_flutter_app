@@ -15,7 +15,7 @@ class NoteFields {
 }
 
 class Note {
-  final int? id;
+  final int id;
   final bool isImportant;
   final int number;
   final String title;
@@ -24,20 +24,20 @@ class Note {
 
   const Note({
     this.id,
-    required this.isImportant,
-    required this.number,
-    required this.title,
-    required this.description,
-    required this.createdTime,
+    this.isImportant,
+    this.number,
+    this.title,
+    this.description,
+    this.createdTime,
   });
 
   Note copy({
-    int? id,
-    bool? isImportant,
-    int? number,
-    String? title,
-    String? description,
-    DateTime? createdTime,
+    int id,
+    bool isImportant,
+    int number,
+    String title,
+    String description,
+    DateTime createdTime,
   }) =>
       Note(
         id: id ?? this.id,
@@ -48,7 +48,7 @@ class Note {
         createdTime: createdTime ?? this.createdTime,
       );
 
-  Map<String, Object?> toJson() => {
+  Map<String, Object> toJson() => {
         NoteFields.id: id,
         NoteFields.title: title,
         NoteFields.isImportant:
@@ -58,8 +58,8 @@ class Note {
         NoteFields.time: createdTime.toIso8601String(),
       };
 
-  static Note fromJson(Map<String, Object?> json) => Note(
-      id: json[NoteFields.id] as int?,
+  static Note fromJson(Map<String, Object> json) => Note(
+      id: json[NoteFields.id] as int,
       isImportant: json[NoteFields.isImportant] == 1,
       number: json[NoteFields.number] as int,
       title: json[NoteFields.title] as String,

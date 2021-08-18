@@ -10,13 +10,12 @@ class NavDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            child: Container(
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-              image: AssetImage('assets/images/logo_small.png'),
-              fit: BoxFit.fill,
-            ))),
-          ),
+              child: Container(
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+            image: AssetImage('assets/images/logo_small.png'),
+            fit: BoxFit.fill,
+          )))),
           ListTile(
             leading: Icon(Icons.home),
             title: Text('Welcome'),

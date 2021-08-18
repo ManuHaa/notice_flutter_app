@@ -11,7 +11,7 @@ class Routes {
   static const String events = Events.routeName;
   static const String login = Login.routeName;
   static const String profile = Profile.routeName;
-  static const String to_do = ToDo.routeName;
+  static const String to_do = Todos.routeName;
   static const String home = Home.routeName;
   static const String password_reset = PasswordReset.routeName;
 }
