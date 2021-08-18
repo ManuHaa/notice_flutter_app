@@ -33,6 +33,7 @@ class TodoDetailState extends State<TodoDetail> {
     titleController.text = todo.title;
     descriptionController.text = todo.description;
 
+    //easy navigation with todos
     return WillPopScope(
       // ignore: missing_return
       onWillPop: () {
@@ -41,10 +42,16 @@ class TodoDetailState extends State<TodoDetail> {
       child: Scaffold(
         backgroundColor: Colors.orange.shade50,
         appBar: AppBar(
-          title: Text(appBarTitle),
+          title: Text(
+            appBarTitle,
+            style: TextStyle(color: Colors.white),
+          ),
           backgroundColor: MaterialColor(0xFFF8B948, color),
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            ),
             onPressed: () {
               moveToLastScreen();
             },

@@ -36,7 +36,10 @@ class _TodoListState extends State<TodoList> {
   DatabaseHelper databaseHelper = DatabaseHelper();
   List<Todo> todoList;
   int count = 0;
+  static var _prioities = ["High", "Low"];
+  Todo todo;
 
+  //navigation to detail screen
   void navigateToDetail(Todo todo, String title) async {
     bool result =
         await Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -49,6 +52,7 @@ class _TodoListState extends State<TodoList> {
     }
   }
 
+  //update in db
   void updateListView() {
     final Future<Database> dbFuture = databaseHelper.initalizeDatabase();
     dbFuture.then((database) {
@@ -60,6 +64,21 @@ class _TodoListState extends State<TodoList> {
         });
       });
     });
+  }
+
+  //Converting the Priority into String for showing to User
+  String getPriorityAsString(int value) {
+    String priority;
+    switch (value) {
+      case 1:
+        priority = _prioities[0];
+        break;
+      case 2:
+        priority = _prioities[1];
+        break;
+      default:
+    }
+    return priority;
   }
 
   @override
@@ -96,6 +115,7 @@ class _TodoListState extends State<TodoList> {
       );
     }
 
+    //easy navigation with todos add page
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
@@ -111,6 +131,7 @@ class _TodoListState extends State<TodoList> {
     );
   }
 
+  //List view in todo home
   ListView getTodoListView() {
     return ListView.builder(
       itemCount: count,
@@ -126,17 +147,24 @@ class _TodoListState extends State<TodoList> {
               onPressed: () {},
               icon: Icon(Icons.check_circle_outline_outlined),
             ),
-            title: Text(
+            title: Center(
+                child: Text(
               this.todoList[position].title,
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 25.0),
-            ),
-            subtitle: Text(
-              this.todoList[position].date,
-              style: TextStyle(color: Colors.black),
-            ),
+            )),
+            subtitle: Column(children: [
+              Text(
+                this.todoList[position].date,
+                style: TextStyle(color: Colors.black),
+              ),
+              Text(
+                getPriorityAsString(this.todoList[position].priority),
+                style: TextStyle(color: Colors.red),
+              )
+            ]),
             trailing: GestureDetector(
               child: Icon(
                 Icons.edit,
