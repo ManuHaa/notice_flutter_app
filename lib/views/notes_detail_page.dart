@@ -4,14 +4,14 @@ import 'package:notice_flutter_app/colorpalette/colorpalette.dart';
 import 'package:notice_flutter_app/db/notes_database.dart';
 import 'package:notice_flutter_app/model/note.dart';
 
-import 'edit_note_page.dart';
+import 'notes_edit_page.dart';
 
 class NoteDetailPage extends StatefulWidget {
   final int noteId;
 
   const NoteDetailPage({
-    Key? key,
-    required this.noteId,
+    Key key,
+    this.noteId,
   }) : super(key: key);
 
   @override
@@ -19,7 +19,7 @@ class NoteDetailPage extends StatefulWidget {
 }
 
 class _NoteDetailPageState extends State<NoteDetailPage> {
-  late Note note;
+  Note note;
   bool isLoading = false;
 
   @override

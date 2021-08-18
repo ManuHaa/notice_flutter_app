@@ -1,4 +1,3 @@
-import 'package:notice_flutter_app/views/notes.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:notice_flutter_app/model/note.dart';
@@ -8,14 +7,14 @@ class NotesDatabase {
 
   static final NotesDatabase instance = NotesDatabase._init();
 
-  static Database? _database;
+  static Database _database;
 
   //connection
   Future<Database> get database async {
-    if (_database != null) return _database!;
+    if (_database != null) return _database;
 
     _database = await _initDB('notes.db');
-    return _database!;
+    return _database;
   }
 
   Future<Database> _initDB(String filepath) async {

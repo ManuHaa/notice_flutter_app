@@ -6,8 +6,8 @@ import 'package:notice_flutter_app/widgets/nav-drawer.dart';
 import 'package:notice_flutter_app/model/note.dart';
 import 'package:notice_flutter_app/widgets/note_card_widget.dart';
 
-import 'edit_note_page.dart';
-import 'note_detail_page.dart';
+import 'notes_edit_page.dart';
+import 'notes_detail_page.dart';
 
 class Notes extends StatelessWidget {
   static const String routeName = '/notes';
@@ -34,7 +34,7 @@ class NotesPage extends StatefulWidget {
 }
 
 class _NotesPageState extends State<NotesPage> {
-  late List<Note> notes;
+  List<Note> notes;
   bool isLoading = false;
 
   @override
@@ -94,7 +94,7 @@ class _NotesPageState extends State<NotesPage> {
           return GestureDetector(
             onTap: () async {
               await Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => NoteDetailPage(noteId: note.id!),
+                builder: (context) => NoteDetailPage(noteId: note.id),
               ));
 
               refreshNotes();

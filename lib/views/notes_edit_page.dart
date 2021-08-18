@@ -1,29 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:notice_flutter_app/colorpalette/colorpalette.dart';
 import 'package:notice_flutter_app/db/notes_database.dart';
 import 'package:notice_flutter_app/model/note.dart';
-import 'package:notice_flutter_app/widgets/nav-drawer.dart';
 import 'package:notice_flutter_app/widgets/note_form_widget.dart';
 
 //view if you touch the add Button
 
 class AddEditNotePage extends StatefulWidget {
-  final Note? note;
+  final Note note;
 
   const AddEditNotePage({
-    Key? key,
+    Key key,
     this.note,
   }) : super(key: key);
+
   @override
   _AddEditNotePageState createState() => _AddEditNotePageState();
 }
 
 class _AddEditNotePageState extends State<AddEditNotePage> {
   final _formKey = GlobalKey<FormState>();
-  late bool isImportant;
-  late int number;
-  late String title;
-  late String description;
+  bool isImportant;
+  int number;
+  String title;
+  String description;
 
   @override
   void initState() {
@@ -71,7 +70,7 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
   }
 
   void addOrUpdateNote() async {
-    final isValid = _formKey.currentState!.validate();
+    final isValid = _formKey.currentState.validate();
 
     if (isValid) {
       final isUpdating = widget.note != null;
@@ -87,7 +86,7 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
   }
 
   Future updateNote() async {
-    final note = widget.note!.copy(
+    final note = widget.note.copy(
       isImportant: isImportant,
       number: number,
       title: title,
